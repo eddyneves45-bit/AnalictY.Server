@@ -215,6 +215,7 @@ app.UseCors();
 app.UseRateLimiter();
 app.UseHttpLogging();
 app.UseMiddleware<FrontendProxyMiddleware>();
+app.UseAuthentication();
 app.Use(async (context, next) =>
 {
     context.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
@@ -235,7 +236,6 @@ app.Use(async (context, next) =>
 
     await next();
 });
-app.UseAuthentication();
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path;
@@ -252,6 +252,7 @@ app.Use(async (context, next) =>
         !path.StartsWithSegments("/api/system/version") &&
         !path.StartsWithSegments("/api/system/updates/check") &&
         !path.StartsWithSegments("/api/health") &&
+        !path.StartsWithSegments("/api/admin") &&
         !HttpMethods.IsOptions(context.Request.Method);
 
     if (!requiresCookieSession || context.User.Identity?.IsAuthenticated != true)
@@ -282,6 +283,7 @@ app.Use(async (context, next) =>
 app.Use(async (context, next) =>
 {
     if (IsSensitiveAdminPath(context.Request.Path) &&
+        !context.Request.Path.StartsWithSegments("/api/admin") &&
         context.User.Identity?.IsAuthenticated == true &&
         !context.User.IsInRole("admin"))
     {
@@ -294,6 +296,7 @@ app.Use(async (context, next) =>
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path;
+    
     var isApiRequest = path.StartsWithSegments("/api");
     var isWebSocketRequest = path.StartsWithSegments("/ws");
     var isHubRequest = path.StartsWithSegments("/hubs");
@@ -306,7 +309,8 @@ app.Use(async (context, next) =>
         path.StartsWithSegments("/api/system/health") ||
         path.StartsWithSegments("/api/system/version") ||
         path.StartsWithSegments("/api/system/updates/check") ||
-        path.StartsWithSegments("/api/health");
+        path.StartsWithSegments("/api/health") ||
+        path.StartsWithSegments("/api/admin");
 
     if ((isApiRequest || isWebSocketRequest || isHubRequest) &&
         !HttpMethods.IsOptions(context.Request.Method) &&

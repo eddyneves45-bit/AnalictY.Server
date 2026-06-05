@@ -1,3 +1,5 @@
+using Scada.Api.Endpoints;
+
 public static class ScadaEndpointMappings
 {
     public static WebApplication MapScadaEndpoints(this WebApplication app)
@@ -30,6 +32,7 @@ public static class ScadaEndpointMappings
         app.MapFtpExportEndpoints();
         app.MapDatabaseBrowserEndpoints();
         app.MapSystemEndpoints();
+        app.MapAdminEndpoints();
 
         return app;
     }

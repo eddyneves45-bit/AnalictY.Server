@@ -43,21 +43,24 @@ backend/
 
 Este repositório está sendo migrado progressivamente do `scada_mes`.
 
-**Fase atual:** S1 - Base do Server
+**Fase atual:** S2 - Server configurado e rodando
 
 - [x] Criar README
-- [ ] Copiar documentação técnica
-- [ ] Copiar .gitignore
-- [ ] Copiar backend
-- [ ] Criar solução .sln
-- [ ] Compilar
+- [x] Copiar documentação técnica
+- [x] Copiar .gitignore
+- [x] Copiar backend
+- [x] Criar solução .sln
+- [x] Compilar
+- [x] Configurar appsettings.json
+- [x] Criar .env.example
+- [x] Iniciar Server (port 5000)
+- [ ] Testar integração com Web
 
 ## Próximos Passos
 
-1. Copiar backend do `scada_mes`
-2. Criar solução `AnalictY.Server.sln`
-3. Compilar e validar
-4. Testar endpoints principais
+1. Testar integração com Web
+2. Validar endpoints principais
+3. Implementar telas técnicas no Manager
 
 ## Documentação
 
