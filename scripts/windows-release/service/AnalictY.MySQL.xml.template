@@ -1,0 +1,15 @@
+<service>
+  <id>AnalictYMySQL</id>
+  <name>AnalictY MySQL</name>
+  <description>Banco de dados local MES do AnalictY.</description>
+  <executable>%BASE%\..\runtime\mysql\bin\mysqld.exe</executable>
+  <arguments>--defaults-file="{{MYSQL_CONFIG_PATH}}"</arguments>
+  <workingdirectory>%BASE%\..\runtime\mysql</workingdirectory>
+  <startmode>Automatic</startmode>
+  <delayedAutoStart>false</delayedAutoStart>
+  <logpath>%BASE%\..\logs\mysql</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10485760</sizeThreshold>
+    <keepFiles>10</keepFiles>
+  </log>
+</service>

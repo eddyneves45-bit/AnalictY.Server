@@ -1,0 +1,20 @@
+[Unit]
+Description=SCADA MES API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=scada
+Group=scada
+WorkingDirectory=/opt/scada/backend
+EnvironmentFile=/etc/scada/scada.env
+ExecStart=/usr/bin/dotnet /opt/scada/backend/Scada.Api.dll --urls http://127.0.0.1:5000
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+SyslogIdentifier=scada-api
+
+[Install]
+WantedBy=multi-user.target
+

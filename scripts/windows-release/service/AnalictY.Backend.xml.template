@@ -1,0 +1,26 @@
+<service>
+  <id>AnalictYBackend</id>
+  <name>AnalictY Backend</name>
+  <description>API local do iioT AnalictY.</description>
+  <executable>%BASE%\..\app\backend\Scada.Api.exe</executable>
+  <arguments>--urls "http://0.0.0.0:5000;https://0.0.0.0:443"</arguments>
+  <workingdirectory>%BASE%\..\app\backend</workingdirectory>
+  <startmode>Automatic</startmode>
+  <delayedAutoStart>false</delayedAutoStart>
+  <logpath>%BASE%\..\logs\backend</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10485760</sizeThreshold>
+    <keepFiles>10</keepFiles>
+  </log>
+  <env name="ASPNETCORE_ENVIRONMENT" value="Production" />
+  <env name="ANALICTY_DATA" value="%BASE%\..\data" />
+  <env name="ANALICTY_LOGS" value="%BASE%\..\logs" />
+  <env name="AnalictY__UpdateManifestUrl" value="https://analicty-downloads.s3.sa-east-1.amazonaws.com/updates/stable/latest.json" />
+  <env name="AnalictY__MdnsHostName" value="analicty" />
+  <env name="AnalictY__FrontendProxyUrl" value="http://127.0.0.1:3000" />
+  <env name="Kestrel__Certificates__Default__Path" value="{{HTTPS_CERTIFICATE_PATH}}" />
+  <env name="Kestrel__Certificates__Default__Password" value="{{HTTPS_CERTIFICATE_PASSWORD}}" />
+  <env name="Jwt__Key" value="{{JWT_KEY}}" />
+  <env name="Jwt__Issuer" value="ScadaApi" />
+  <env name="Jwt__Audience" value="ScadaClient" />
+</service>

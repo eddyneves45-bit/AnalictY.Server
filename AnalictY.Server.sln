@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scada.Api", "backend\Scada.Api\Scada.Api.csproj", "{6265018C-2BF0-4EB8-A14B-543D49AF7B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scada.Core", "backend\Scada.Core\Scada.Core.csproj", "{E0B60A43-02CC-4192-83C0-0F3DB2F20C9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scada.Drivers", "backend\Scada.Drivers\Scada.Drivers.csproj", "{A1202BD0-65BB-4DC5-BC76-C57C38463487}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scada.Monitoring", "backend\Scada.Monitoring\Scada.Monitoring.csproj", "{B5E90FE1-D589-451C-9BD2-A3317D2CD2BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scada.MesTests", "backend\Scada.MesTests\Scada.MesTests.csproj", "{D107B1D1-A89B-4D05-ADDE-9D13450D27E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scada.Gateway", "backend\Scada.Gateway\Scada.Gateway.csproj", "{A0D9AAAC-6FEF-431C-91B2-D2A3C46F3C06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6265018C-2BF0-4EB8-A14B-543D49AF7B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6265018C-2BF0-4EB8-A14B-543D49AF7B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6265018C-2BF0-4EB8-A14B-543D49AF7B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6265018C-2BF0-4EB8-A14B-543D49AF7B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B60A43-02CC-4192-83C0-0F3DB2F20C9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B60A43-02CC-4192-83C0-0F3DB2F20C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B60A43-02CC-4192-83C0-0F3DB2F20C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B60A43-02CC-4192-83C0-0F3DB2F20C9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1202BD0-65BB-4DC5-BC76-C57C38463487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1202BD0-65BB-4DC5-BC76-C57C38463487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1202BD0-65BB-4DC5-BC76-C57C38463487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1202BD0-65BB-4DC5-BC76-C57C38463487}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5E90FE1-D589-451C-9BD2-A3317D2CD2BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E90FE1-D589-451C-9BD2-A3317D2CD2BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E90FE1-D589-451C-9BD2-A3317D2CD2BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E90FE1-D589-451C-9BD2-A3317D2CD2BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D107B1D1-A89B-4D05-ADDE-9D13450D27E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D107B1D1-A89B-4D05-ADDE-9D13450D27E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D107B1D1-A89B-4D05-ADDE-9D13450D27E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D107B1D1-A89B-4D05-ADDE-9D13450D27E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0D9AAAC-6FEF-431C-91B2-D2A3C46F3C06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D9AAAC-6FEF-431C-91B2-D2A3C46F3C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D9AAAC-6FEF-431C-91B2-D2A3C46F3C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D9AAAC-6FEF-431C-91B2-D2A3C46F3C06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6265018C-2BF0-4EB8-A14B-543D49AF7B3D} = {1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}
+		{E0B60A43-02CC-4192-83C0-0F3DB2F20C9A} = {1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}
+		{A1202BD0-65BB-4DC5-BC76-C57C38463487} = {1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}
+		{B5E90FE1-D589-451C-9BD2-A3317D2CD2BC} = {1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}
+		{D107B1D1-A89B-4D05-ADDE-9D13450D27E2} = {1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}
+		{A0D9AAAC-6FEF-431C-91B2-D2A3C46F3C06} = {1E3C6AE8-EEAE-45AA-BC53-688E0FF1B4F6}
+	EndGlobalSection
+EndGlobal

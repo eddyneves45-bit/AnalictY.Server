@@ -1,0 +1,21 @@
+[Unit]
+Description=SCADA MES Frontend
+After=network-online.target scada-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=scada
+Group=scada
+WorkingDirectory=/opt/scada/frontend
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+ExecStart=/usr/bin/npm run start
+Restart=always
+RestartSec=5
+SyslogIdentifier=scada-frontend
+
+[Install]
+WantedBy=multi-user.target
+

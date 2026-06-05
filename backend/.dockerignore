@@ -1,0 +1,6 @@
+**/bin/
+**/obj/
+build-check/
+scada.db
+*.log
+*.bak
