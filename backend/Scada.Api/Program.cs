@@ -252,7 +252,7 @@ app.Use(async (context, next) =>
         !path.StartsWithSegments("/api/system/version") &&
         !path.StartsWithSegments("/api/system/updates/check") &&
         !path.StartsWithSegments("/api/health") &&
-        !path.StartsWithSegments("/api/admin") &&
+        !IsAnonymousAdminReadPath(context.Request) &&
         !HttpMethods.IsOptions(context.Request.Method);
 
     if (!requiresCookieSession || context.User.Identity?.IsAuthenticated != true)
@@ -310,7 +310,7 @@ app.Use(async (context, next) =>
         path.StartsWithSegments("/api/system/version") ||
         path.StartsWithSegments("/api/system/updates/check") ||
         path.StartsWithSegments("/api/health") ||
-        path.StartsWithSegments("/api/admin");
+        IsAnonymousAdminReadPath(context.Request);
 
     if ((isApiRequest || isWebSocketRequest || isHubRequest) &&
         !HttpMethods.IsOptions(context.Request.Method) &&
@@ -495,6 +495,25 @@ static bool IsSensitiveAdminPath(PathString path)
     return path.StartsWithSegments("/api/config") ||
         path.StartsWithSegments("/api/logs") ||
         path.StartsWithSegments("/metrics");
+}
+
+static bool IsAnonymousAdminReadPath(HttpRequest request)
+{
+    if (!HttpMethods.IsGet(request.Method))
+    {
+        return false;
+    }
+
+    var path = request.Path;
+    return path.StartsWithSegments("/api/admin/server/overview") ||
+        path.StartsWithSegments("/api/admin/runtime/status") ||
+        path.StartsWithSegments("/api/admin/database/status") ||
+        path.StartsWithSegments("/api/admin/logs") ||
+        path.StartsWithSegments("/api/admin/services") ||
+        path.StartsWithSegments("/api/admin/tags") ||
+        path.StartsWithSegments("/api/admin/mqtt/status") ||
+        path.StartsWithSegments("/api/admin/opcua/status") ||
+        path.StartsWithSegments("/api/admin/backup/status");
 }
 
 static bool IsAllowedCorsOrigin(string origin, string[] allowedOrigins)
