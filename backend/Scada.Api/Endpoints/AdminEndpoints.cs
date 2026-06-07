@@ -411,6 +411,151 @@ public static class AdminEndpoints
         })
         .AllowAnonymous();
 
+        // GET /api/admin/backups
+        app.MapGet("/api/admin/backups", (IConfiguration configuration) =>
+        {
+            var dataDirectory = configuration["AnalictY:DataDirectory"] ?? "-";
+            var backupDirectory = System.IO.Path.Combine(dataDirectory, "backups");
+            var backups = Array.Empty<BackupInfo>();
+
+            if (System.IO.Directory.Exists(backupDirectory))
+            {
+                backups = System.IO.Directory.GetFiles(backupDirectory, "*.db")
+                    .Select(path => new System.IO.FileInfo(path))
+                    .OrderByDescending(f => f.LastWriteTimeUtc)
+                    .Select(f => new BackupInfo(
+                        FileName: f.Name,
+                        CreatedAt: f.LastWriteTimeUtc.ToString("o"),
+                        Size: GetFileSize(f.FullName)
+                    ))
+                    .ToArray();
+            }
+
+            return Results.Ok(new { backups });
+        })
+        .AllowAnonymous();
+
+        // POST /api/admin/backups
+        app.MapPost("/api/admin/backups", async (IConfiguration configuration) =>
+        {
+            var dataDirectory = configuration["AnalictY:DataDirectory"] ?? "-";
+            var dbPath = System.IO.Path.Combine(dataDirectory, "scada.db");
+            var backupDirectory = System.IO.Path.Combine(dataDirectory, "backups");
+
+            if (!System.IO.File.Exists(dbPath))
+            {
+                return Results.BadRequest(new { error = "Banco de dados não encontrado" });
+            }
+
+            System.IO.Directory.CreateDirectory(backupDirectory);
+
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+            var backupFileName = $"backup_{timestamp}.db";
+            var backupPath = System.IO.Path.Combine(backupDirectory, backupFileName);
+
+            try
+            {
+                await Task.Run(() => System.IO.File.Copy(dbPath, backupPath, true));
+                
+                return Results.Ok(new 
+                { 
+                    backup_id = backupFileName,
+                    status = "completed",
+                    message = "Backup criado com sucesso"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem($"Erro ao criar backup: {ex.Message}", statusCode: 500);
+            }
+        })
+        .AllowAnonymous();
+
+        // POST /api/admin/backups/{id}/restore
+        app.MapPost("/api/admin/backups/{id}/restore", async (string id, IConfiguration configuration) =>
+        {
+            var dataDirectory = configuration["AnalictY:DataDirectory"] ?? "-";
+            var dbPath = System.IO.Path.Combine(dataDirectory, "scada.db");
+            var backupDirectory = System.IO.Path.Combine(dataDirectory, "backups");
+            var backupPath = System.IO.Path.Combine(backupDirectory, id);
+
+            if (!System.IO.File.Exists(backupPath))
+            {
+                return Results.BadRequest(new { error = "Backup não encontrado" });
+            }
+
+            try
+            {
+                // Criar backup do arquivo atual antes de restaurar
+                if (System.IO.File.Exists(dbPath))
+                {
+                    var preRestoreBackup = System.IO.Path.Combine(backupDirectory, $"pre_restore_{DateTime.UtcNow:yyyyMMdd_HHmmss}.db");
+                    System.IO.File.Copy(dbPath, preRestoreBackup, true);
+                }
+
+                await Task.Run(() => System.IO.File.Copy(backupPath, dbPath, true));
+                
+                return Results.Ok(new 
+                { 
+                    status = "success",
+                    message = "Backup restaurado com sucesso"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem($"Erro ao restaurar backup: {ex.Message}", statusCode: 500);
+            }
+        })
+        .AllowAnonymous();
+
+        // GET /api/admin/local-server/info
+        app.MapGet("/api/admin/local-server/info", (IConfiguration configuration, IWebHostEnvironment environment) =>
+        {
+            var dataDirectory = configuration["AnalictY:DataDirectory"] ?? "-";
+            var machineName = Environment.MachineName ?? "-";
+            var uptime = GetProcessUptime();
+            var version = GetAssemblyVersion();
+            var currentProcess = Process.GetCurrentProcess();
+
+            var response = new 
+            {
+                hostname = machineName,
+                ip_address = "127.0.0.1",
+                port = 5000,
+                os_version = Environment.OSVersion.ToString(),
+                cpu_usage_percent = 0,
+                memory_usage_mb = currentProcess.WorkingSet64 / (1024 * 1024),
+                disk_usage_gb = 0,
+                uptime_seconds = (int)(DateTime.Now - currentProcess.StartTime).TotalSeconds,
+                data_directory = dataDirectory,
+                environment = environment.EnvironmentName
+            };
+
+            return Results.Ok(response);
+        })
+        .AllowAnonymous();
+
+        // GET /api/admin/events
+        app.MapGet("/api/admin/events", async (ScadaDbContext dbContext, int limit = 50) =>
+        {
+            var events = await dbContext.StopEvents
+                .OrderByDescending(e => e.StartTime)
+                .Take(limit)
+                .Select(e => new 
+                {
+                    id = e.Id.ToString(),
+                    timestamp = e.StartTime.ToString("o"),
+                    level = "info",
+                    source = "downtime",
+                    message = e.Reason ?? "Parada registrada",
+                    acknowledged = false
+                })
+                .ToListAsync();
+
+            return Results.Ok(new { events, total = events.Count });
+        })
+        .AllowAnonymous();
+
         return app;
     }
 

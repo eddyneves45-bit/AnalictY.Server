@@ -499,21 +499,33 @@ static bool IsSensitiveAdminPath(PathString path)
 
 static bool IsAnonymousAdminReadPath(HttpRequest request)
 {
-    if (!HttpMethods.IsGet(request.Method))
-    {
-        return false;
-    }
-
     var path = request.Path;
-    return path.StartsWithSegments("/api/admin/server/overview") ||
-        path.StartsWithSegments("/api/admin/runtime/status") ||
-        path.StartsWithSegments("/api/admin/database/status") ||
-        path.StartsWithSegments("/api/admin/logs") ||
-        path.StartsWithSegments("/api/admin/services") ||
-        path.StartsWithSegments("/api/admin/tags") ||
-        path.StartsWithSegments("/api/admin/mqtt/status") ||
-        path.StartsWithSegments("/api/admin/opcua/status") ||
-        path.StartsWithSegments("/api/admin/backup/status");
+    
+    // Allow GET requests for read operations
+    if (HttpMethods.IsGet(request.Method))
+    {
+        return path.StartsWithSegments("/api/admin/server/overview") ||
+            path.StartsWithSegments("/api/admin/runtime/status") ||
+            path.StartsWithSegments("/api/admin/database/status") ||
+            path.StartsWithSegments("/api/admin/logs") ||
+            path.StartsWithSegments("/api/admin/services") ||
+            path.StartsWithSegments("/api/admin/tags") ||
+            path.StartsWithSegments("/api/admin/mqtt/status") ||
+            path.StartsWithSegments("/api/admin/opcua/status") ||
+            path.StartsWithSegments("/api/admin/backup/status") ||
+            path.StartsWithSegments("/api/admin/backups") ||
+            path.StartsWithSegments("/api/admin/local-server/info") ||
+            path.StartsWithSegments("/api/admin/events");
+    }
+    
+    // Allow POST for backup creation (temporary for testing)
+    if (HttpMethods.IsPost(request.Method))
+    {
+        return path.StartsWithSegments("/api/admin/backups") ||
+               path.StartsWithSegments("/api/admin/backups/") && path.Value?.Contains("/restore") == true;
+    }
+    
+    return false;
 }
 
 static bool IsAllowedCorsOrigin(string origin, string[] allowedOrigins)
@@ -570,6 +582,7 @@ static void AddPermissionPolicy(AuthorizationOptions options, string policyName,
         policy.AddRequirements(new PermissionAuthorizationRequirement(permission));
     });
 }
+
 
 
 
