@@ -14,7 +14,7 @@ using System.Security.Claims;
 public static class AuthEndpoints
 {
     private static readonly TimeSpan AccessTokenLifetime = TimeSpan.FromMinutes(15);
-    private static readonly TimeSpan SessionCookieLifetime = TimeSpan.FromMinutes(15);
+    private static readonly TimeSpan SessionCookieLifetime = TimeSpan.FromHours(24);
 
     public static WebApplication MapAuthEndpoints(this WebApplication app)
     {
